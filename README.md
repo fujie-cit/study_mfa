@@ -40,7 +40,9 @@ mfa model download acoustic japanese_mfa --github_token アクセストークン
 
 各種ファイルは，`~/Documents/MFA`以下にダウンロードされます．
 
-## データの準備
+## 実行
+
+### 入力データ
 
 MFAは，音声ファイルとそれに対応するテキストファイルが同じディレクトリにあることを前提としています．
 
@@ -57,9 +59,27 @@ data/
     - ...
 ```
 
-### 例: JSUTコーパス
+### 実行
 
-#### データの準備
+`mfa align`コマンドを使用して，アライメントを取ります．
+
+```
+mfa align ./data japanese_mfa japanese_mfa ./data_aligned
+```
+
+- `./data`: 入力データがあるディレクトリ
+- `japanese_mfa`: 使用するモデル（辞書と音響モデル．今回は同じ名前）
+- `./data_aligned`: 出力データを保存するディレクトリ
+
+### 結果
+
+アライメントの結果は，`./data_aligned` に保存されます．
+
+例えば `file1.wav` に対してアライメントを取った場合，`file1.TextGrid` などのファイル（TextGrid形式）が生成されます．
+
+## 実行例: JSUTコーパス
+
+### データの準備
 
 JSUTコーパスの最初の100文（BASIC5000_0001〜BASIC5000_0000）を使用してアライメントを取る例を考えます．
 
@@ -86,7 +106,7 @@ done
 python make_transcript.py $JSUT_BASIC5000_DIR/transcript_utf8.txt 1 100 data/
 ```
 
-#### アライメントの実行
+### アライメントの実行
 
 `./data`の中のデータに対してアライメントを実行し，結果を `./data_aligned` に保存します．
 
@@ -94,14 +114,14 @@ python make_transcript.py $JSUT_BASIC5000_DIR/transcript_utf8.txt 1 100 data/
 mfa align ./data japanese_mfa japanese_mfa ./data_aligned
 ```
 
-#### 実行結果
+### 実行結果
 
 実行結果は`./data_aligned` に，
 `BASIC5000_0001.TextGrid` などのファイル（TextGrid形式）が生成されます．
 
-###　textgrid2csv.py
+## TextGrid ファイルの変換
 
-TextGrid ファイルは，Praatで利用されるファイル形式で，実体はテキストファイルですがそのままでは少々扱いにくいため，下記のようなCSVファイルに変換するスクリプトを用意しました．
+TextGrid ファイルは，Praatで利用されるファイル形式で，実体はテキストファイルですがそのままでは少々扱いにくいため，下記のようなCSVファイルに変換するスクリプト（`textgrid2csv.py`）を用意しました．
 
 ```plain text
 type,label,start_time,end_time
